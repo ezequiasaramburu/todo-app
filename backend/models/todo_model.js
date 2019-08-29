@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const { TASK_STATUS } = require('../const/const.js');
 const Schema = mongoose.Schema;
+
 let Todo = new Schema({
-    _id: {
-      type: Number
-    },
     description: {
       text: {
         type: String,

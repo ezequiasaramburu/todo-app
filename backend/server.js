@@ -11,11 +11,13 @@ autoIncrement = require('mongoose-auto-increment');
 
 app.use(cors());
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
 const connection = mongoose.createConnection(config.connection.uri);
-mongoose.connect(config.connection.uri, {useNewUrlParser: true});
+mongoose.connect(config.connection.uri);
 
 connection.once('open', function() {
     console.log('MongoDB database connection established successfully');

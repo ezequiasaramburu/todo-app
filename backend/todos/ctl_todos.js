@@ -5,7 +5,7 @@ module.exports.get = async function(req, res) {
   console.log('===> GET');
   try {
     const todos = await TodoSchema.find({});
-    res.status(200).json({success: success, todos});
+    res.status(200).json({success: true, todos});
 	} catch(error) {
     console.log(error);
 		res.status(400).json({success: false, msg: 'Somenthing went wrong fetching todos'});

@@ -36,18 +36,18 @@ export default class CreateTodo extends Component {
       }
       await createTodo(newTodo)
         .then(res => {
-          this.setState({
-            description: { 
-              text: ''
-            },
-            status: ''
-          })
           alert('New Todo successfully added')
         })
         .catch(error => {
           console.log(error);
           alert('Somenthing went wrong Creating Todo');
         });
+        this.setState({
+          description: { 
+            text: ''
+          },
+          status: ''
+        })
     };
 
     render() {

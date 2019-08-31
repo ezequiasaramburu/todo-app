@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { createTodo } from '../api/services/todos';
 
 export default class CreateTodo extends Component {
     constructor(props) {
@@ -27,8 +28,19 @@ export default class CreateTodo extends Component {
       });
     }
 
-    onSubmit(event) {
+    onSubmit = async (event) => {
       event.preventDefault();
+      const newTodo = {
+        description: {
+          text: this.state.description.text
+        }
+      }
+      await createTodo(newTodo).then(
+          res => {
+              const { text } = res.data.todo.description;
+              alert('New Todo ' + text + ' successfully added')
+          }
+      );
       this.setState({
           description: { 
             text: ''

@@ -4,7 +4,6 @@ import { createTodo } from '../api/services/todos';
 export default class CreateTodo extends Component {
     constructor(props) {
       super(props);
-
       this.state = {
           description: {
             text: ''
@@ -35,18 +34,20 @@ export default class CreateTodo extends Component {
           text: this.state.description.text
         }
       }
-      await createTodo(newTodo).then(
-          res => {
-              const { text } = res.data.todo.description;
-              alert('New Todo ' + text + ' successfully added')
-          }
-      );
-      this.setState({
-          description: { 
-            text: ''
-          },
-          status: ''
-      })
+      await createTodo(newTodo)
+        .then(res => {
+          this.setState({
+            description: { 
+              text: ''
+            },
+            status: ''
+          })
+          alert('New Todo successfully added')
+        })
+        .catch(error => {
+          console.log(error);
+          alert('Somenthing went wrong Creating Todo');
+        });
     };
 
     render() {

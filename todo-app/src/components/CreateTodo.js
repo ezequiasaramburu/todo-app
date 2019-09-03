@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { createTodo } from '../api/services/todos';
+import { createTodo, uploadFile } from '../api/services/todos';
 
 export default class CreateTodo extends Component {
     constructor(props) {
       super(props);
       this.state = {
           description: {
-            text: ''
-          },
-          file: null,
+            text: '',
+            file: null,
+          }
       }
     };
 
@@ -21,10 +21,27 @@ export default class CreateTodo extends Component {
     };
 
     onAddFile = (event) => {
-      console.log(event.target.files[0]);
       this.setState({
-        file: event.target.files[0]
+        description: {
+          file: event.target.files[0]
+        }
       });
+    }
+
+    onUploadFile = async (file) => {
+      await uploadFile(file)
+        .then(res => {
+          alert('File upload successfully');
+          this.setState({
+            description: {
+              file: null
+            }
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          alert('Somenthing went wrong updating file');
+        });
     }
 
     onSubmit = async (event) => {
@@ -34,6 +51,8 @@ export default class CreateTodo extends Component {
           text: this.state.description.text
         }
       }
+      const file = this.state.description.file;
+      if (file !== undefined) this.onUploadFile(file);
       await createTodo(newTodo)
         .then(res => {
           alert('New Todo successfully added')

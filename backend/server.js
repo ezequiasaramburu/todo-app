@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
 const config = require('./config/config.js');
 const mongoose = require('mongoose');
 const Todos = require('./todos/router.js');
@@ -32,6 +33,33 @@ app.use(function(req, res, next) {
 
 // Router
 app.use('/todos', Todos);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const folderPath = `./public/assets/img`;
+    try {
+      fs.mkdirSync(folderPath, { recursive: true })
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err
+    }
+    cb(null, folderPath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname )
+  }
+});
+const uploadFile = multer({ storage: storage }).single('file');
+
+app.post('/upload',function(req, res) {
+  uploadFile(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+        return res.status(500).json(err);
+    } else if (err) {
+        return res.status(500).json(err);
+    }
+    return res.status(200).send(req.file);
+  })
+});
 
 app.listen(config.serverPort.PORT, function() {
 	console.log('Server is running on Port: ' + config.serverPort.PORT);

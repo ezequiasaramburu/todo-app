@@ -4,26 +4,36 @@ import {
   resolveTodo,
   deleteTodo
 } from '../api/services/todos';
+import { TASK_STATUS } from '../utils/const/const';
 
-const Todo = props => (
-  <tr>
-      <td className='col-md-4' > 
-        { props.todo.description.text } 
-      </td>
-      <td className='col-md-4'>
-      </td>
-      <td className='col-md-2' >
-          <button onClick={() => resolveTodo(props.todo._id)} >
-              Resolve
-          </button>
-      </td>
-      <td className='col-md-2' >
-          <button onClick={() => deleteTodo(props.todo._id)} >
-              Delete
-          </button>
-      </td>
-  </tr>
-);
+const Todo = (props) => {
+  const todo = props.todo;
+  return (
+    <tr>
+        <td className='col-md-4' > 
+          { todo.description.text } 
+        </td>
+        <td className='col-md-4'>
+        </td>
+        {todo.status === TASK_STATUS.RESOLVED ? (
+          <td>
+            { 'RESOLVED' }
+          </td>
+        ) : (  
+          <td className='col-md-2' >
+              <button onClick={() => resolveTodo(todo._id)} >
+                  Resolve
+              </button>
+          </td>
+        )}
+        <td className='col-md-2' >
+            <button onClick={() => deleteTodo(todo._id)} >
+                Delete
+            </button>
+        </td>
+    </tr>
+  )
+};
 
 export default class TodosList extends Component {
     constructor(props) {

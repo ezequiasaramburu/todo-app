@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
 const connection = mongoose.createConnection(config.connection.uri);
 mongoose.connect(config.connection.uri);
 

@@ -33,8 +33,12 @@ export default class TodosList extends Component {
       };
     };
 
-    async componentDidMount() {
-        await getAllTodos()
+    componentDidMount() {
+      this.getTodos();
+    };
+
+    getTodos = async () => {
+      await getAllTodos()
           .then(res => {
             console.log(res);
             const { todos } = res.data;

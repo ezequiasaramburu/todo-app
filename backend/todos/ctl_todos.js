@@ -23,34 +23,35 @@ module.exports.create = async function(req, res) {
   }
 };
 
-module.exports.update = async function(req, res) {
+module.exports.update = function(req, res) {
   const { id }  = req.params;
-  await TodoSchema.findByIdAndUpdate(
-      { _id: ObjectId(id) },
-      { $set: {
-          status: TASK_STATUS.RESOLVED
-        }
-      },
-      { new: true },
-      function(err, todoResolved) { 
-          if(err) {
-              console.log(error);
-              return res
-                      .status(400)
-                      .json({ success: false, msg: 'Somenthing went wrong marking Todo as Resolved' });
-          }
-          return res.status(200).json({ success: true, todoResolved });
-      });
+  TodoSchema.findByIdAndUpdate(
+    { _id: ObjectId(id) },
+    { $set: {
+        status: TASK_STATUS.RESOLVED
+      }
+    },
+    { new: true },
+    function(err, todoResolved) { 
+      if(err) {
+          console.log(error);
+          return res
+                  .status(400)
+                  .json({ success: false, msg: 'Somenthing went wrong marking Todo as Resolved' });
+      }
+      return res.status(200).json({ success: true, todoResolved });
+    });
 };
 
-module.exports.delete = async function(req, res) {
+module.exports.delete = function(req, res) {
   const { id } = req.params;
-  await TodoSchema.findByIdAndRemove({ _id: id }, function(err, todo) {
+  TodoSchema.findByIdAndRemove({ _id: id }, function(err, todo) {
     if(err) {
       console.log(error);
       res.status(400).json({ success: false, msg: 'Somenthing went wrong deleting Todo' });
+    } else {
+      res.status(200).json({ success: true });
     }
-    return res.status(200).json({ success: true });
   });
 }
 

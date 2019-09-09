@@ -4,48 +4,30 @@ import { createTodo, uploadFile } from '../api/services/todos';
 export default class CreateTodo extends Component {
   constructor(props) {
     super(props);
+    this.fileInput = React.createRef();
     this.state = {
-      description: {
-        text: '',
-        file: null,
-      }
+      text: ''
     }
   };
   onChangeDescription = (event) => {
     this.setState({
-      description: {
-        text: event.target.value
-      }
+      text: event.currentTarget.value
     });
   };
   onAddFile = (event) => {
-    this.setState({
-      description: {
-        file: event.target.files[0]
-      }
-    });
+    this.fileInput = event.target.files[0];
   }
 
-  onUploadFile = (file) => {
+  onUploadFile = (file) =>  {
     const data = new FormData();
     data.append('file', file);
     data.append('filename', file.name);
     uploadFile(data)
       .then(res => {
         alert('File upload successfully');
-        this.setState({
-          description: {
-            file: null
-          }
-        });
       })
       .catch(err => {
         console.log(err);
-        this.setState({
-          description: {
-            file: null
-          }
-        });
         alert('Somenthing went wrong updating file');
       });
   }
@@ -54,46 +36,53 @@ export default class CreateTodo extends Component {
     event.preventDefault();
     const newTodo = {
       description: {
-        text: this.state.description.text
+        text: this.state.text
       }
     }
-    const file = this.state.description.file;
-    if (file !== undefined) this.onUploadFile(file);
-    createTodo(newTodo)
-      .then(res => {
-        alert('New Todo successfully added')
-      })
-      .catch(error => {
-        console.log(error);
-        alert('Somenthing went wrong Creating Todo');
-      });
-      this.setState({
-        description: { 
-          text: ''
-        },
-        status: ''
-      })
+    if (this.state.text) {
+      const file = this.fileInput;
+      if (file !== null) {
+        this.onUploadFile(file);
+      }
+      createTodo(newTodo)
+        .then(res => {
+          this.setState({
+            text: '',
+          });
+          alert('New Todo successfully added')
+        })
+        .catch(error => {
+          console.log(error);
+          alert('Somenthing went wrong Creating Todo');
+        });
+    } else {
+      alert('Description is required to add Todo');
+    }
   };
   render() {
+    const fileInputKey = this.fileInput.value ? this.fileInput.value.name : +new Date();
     return (
       <div style={{marginTop: 20}}>
         <h3>Create New Todo</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group"> 
             <label>Description: </label>
-            <input  
+            <input
                 type="text"
                 className="form-control"
-                value={this.state.description.text}
+                value={this.state.text}
                 onChange={this.onChangeDescription}
             />
           </div>
           <div className="form-group files">
             <label>Attach File: </label>
             <input 
-              type="file" 
+              type="file"
+              key={fileInputKey}
+              defaultValue={this.fileInput.current}
               className="form-control files"
               onChange={this.onAddFile}
+              ref={ref => (this.fileInput = ref)}
             />
           </div>
           <div className="form-group">

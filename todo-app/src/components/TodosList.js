@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { Container, Row, Col } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faFile } from '@fortawesome/free-solid-svg-icons';
 import {
   getAllTodos,
   resolveTodo,
@@ -6,36 +10,59 @@ import {
 } from '../api/services/todos';
 import { TASK_STATUS } from '../utils/const/const';
 
+library.add(faFile);
 const Todo = (props) => {
   const { todo, remove, resolve } = props;
   return (
-    <tr>
-      <td className='col-md-4'>
+    <Row 
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
+        background: '#e6e6e6',
+        borderRadius: 3,
+        height: 'auto',
+      }}
+    >
+      <Col xs='1' md='1'>
         { todo._id }
-      </td>
-      <td className='col-md-8' > 
+      </Col>
+      <Col xs='4' md='4'>
         { todo.description.text } 
-      </td>
-      <td className='col-md-5'>
-        { "todo.description.file"}
-      </td>
-      {todo.status === TASK_STATUS.RESOLVED ? (
-        <td>
+      </Col>
+      { todo.description.file ? (
+        <Col xs='3' md='3'>
+          <FontAwesomeIcon
+            color="white"
+            icon="file"
+            size='3x'
+          />
+        </Col>
+      ) : (
+        <Col xs='3' md='3'>
+          { 'No file attached' }
+        </Col>
+      )}
+      { todo.status === TASK_STATUS.RESOLVED ? (
+        <Col xs='2' md='2'>
           { 'RESOLVED' }
-        </td>
+        </Col>
       ) : (  
-        <td className='col-md-2' >
+        <Col xs='2' md='2'>
           <button onClick={() => resolve(todo._id)} >
             Resolve
           </button>
-        </td>
+        </Col>
       )}
-      <td className='col-md-2' >
+      <Col xs='2' md='2'>
         <button onClick={() => remove(todo._id)} >
           Delete
         </button>
-      </td>
-    </tr>
+      </Col>
+    </Row>
   )
 };
 
@@ -64,13 +91,6 @@ export default class TodosList extends Component {
         });
     };
 
-    todoList = () => {
-      const { todos } = this.state;
-        return todos.map((currentTodo, i) => {
-          return <Todo todo={currentTodo} remove={this.deleteTodo} resolve={this.resolveTodo} key={i} />;
-        });
-    };
-
     resolveTodo = (todoId) => {
       resolveTodo(todoId)
         .then(res =>{
@@ -86,7 +106,6 @@ export default class TodosList extends Component {
     deleteTodo = (todoId) => {
       deleteTodo(todoId)
         .then(res => {
-          console.log(res);
           this.getTodos(); // For test only, correct way to update render is with redux.
           alert('Deleted successfully');
         })
@@ -97,23 +116,25 @@ export default class TodosList extends Component {
     };
 
     render() {
-      const todos = this.todoList();
+      const { todos } = this.state;
         return (
           <div>
               <h3>Todos List</h3>
-              <table className="table" style={{ marginTop: 20 }} >
-                <thead className='col-md-12'>
-                  <tr>
-                    <th className='col-md-1'>ID</th>
-                    <th className="col-md-2">Description</th>
-                    <th className="col-md-5">File</th>
-                    <th className="col-md-4">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  { todos }
-                </tbody>
-              </table>
+              <Container style={{ marginTop: 20 }} >
+                <Row style={{ fontWeight: 'bold', background: '#d3d3d3', borderRadius: 2 }}>
+                  <Col xs='1' md='1'> { 'ID' }</Col>
+                  <Col xs='4' md='4'>{ 'Description' }</Col>
+                  <Col xs='3' md='3'>{ 'File' }</Col>
+                </Row>
+                { todos.map((currentTodo, i) => {
+                  return <Todo 
+                          todo={currentTodo}
+                          remove={this.deleteTodo}
+                          resolve={this.resolveTodo}
+                          key={i}
+                        />
+                })}
+              </Container>
           </div>
         )
     }

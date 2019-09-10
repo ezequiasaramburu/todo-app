@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { createTodo, uploadFile } from '../api/services/todos';
+import { createTodo } from '../api/services/todos';
+import { getImageFullUrl, uploadFiles } from '../utils/files';
 
 export default class CreateTodo extends Component {
   constructor(props) {
@@ -18,47 +19,53 @@ export default class CreateTodo extends Component {
     this.fileInput = event.target.files[0];
   }
 
-  onUploadFile = (file) =>  {
-    const data = new FormData();
-    data.append('file', file);
-    data.append('filename', file.name);
-    uploadFile(data)
+  onCreateTodo = newTodo => {
+    createTodo(newTodo)
       .then(res => {
-        alert('File upload successfully');
+        this.setState({
+          text: '',
+        });
+        alert('New Todo successfully added')
       })
-      .catch(err => {
-        console.log(err);
-        alert('Somenthing went wrong updating file');
+      .catch(error => {
+        console.log(error);
+        alert('Somenthing went wrong Creating Todo');
       });
+  }
+
+  onUploadFile = async file => {
+    return await uploadFiles(file);
   }
 
   onSubmit = (event) => {
     event.preventDefault();
+    const file = this.fileInput;
+    const imgUrl = getImageFullUrl(file.name);
     const newTodo = {
       description: {
-        text: this.state.text
+        text: this.state.text,
+        file: imgUrl
       }
-    }
+    };
     if (this.state.text) {
-      const file = this.fileInput;
-      if (file !== null) {
-        this.onUploadFile(file);
-      }
-      createTodo(newTodo)
-        .then(res => {
-          this.setState({
-            text: '',
+      if (file.name) {
+        const fileUploded = this.onUploadFile(file);
+        fileUploded
+          .then(res => {
+            this.onCreateTodo(newTodo);
+          })
+          .catch(err => {
+            console.log(err);
           });
-          alert('New Todo successfully added')
-        })
-        .catch(error => {
-          console.log(error);
-          alert('Somenthing went wrong Creating Todo');
-        });
+      };
+      if(!file.name) {
+        this.onCreateTodo(newTodo);
+      }
     } else {
       alert('Description is required to add Todo');
     }
   };
+
   render() {
     const fileInputKey = this.fileInput.value ? this.fileInput.value.name : +new Date();
     return (

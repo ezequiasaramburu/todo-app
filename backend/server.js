@@ -48,7 +48,7 @@ app.post('/upload', (req, res, next) => {
   const name = uploadFile.name;
   uploadFile.mv(`${__dirname}/public/assets/${name}`, function(err) {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).json({ status: 'failed', err });
     }
     return res.status(200).json({ status: 'uploaded', name });
   });

@@ -33,10 +33,6 @@ export default class CreateTodo extends Component {
       });
   }
 
-  onUploadFile = async file => {
-    return await uploadFiles(file);
-  }
-
   onSubmit = (event) => {
     event.preventDefault();
     const file = this.fileInput;
@@ -49,8 +45,7 @@ export default class CreateTodo extends Component {
     };
     if (this.state.text) {
       if (file.name) {
-        const fileUploded = this.onUploadFile(file);
-        fileUploded
+        uploadFiles(file)
           .then(res => {
             this.onCreateTodo(newTodo);
           })

@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const Todos = require('./todos/router.js');
 
 mongoose.Promise = global.Promise;
-autoIncrement = require('mongoose-auto-increment');
 
 app.use(cors());
 

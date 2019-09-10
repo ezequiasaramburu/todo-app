@@ -26,7 +26,7 @@ module.exports.create = async function(req, res) {
 module.exports.update = function(req, res) {
   const { id }  = req.params;
   TodoSchema.findByIdAndUpdate(
-    { _id: ObjectId(id) },
+    { _id: id },
     { $set: {
         status: TASK_STATUS.RESOLVED
       }

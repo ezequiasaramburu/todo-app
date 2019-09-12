@@ -1,6 +1,5 @@
 # Todo-app
 
-
 Todo-app allows you to save and list TODO tasks 
 
 <div>
@@ -37,8 +36,8 @@ Run backend app
 ```bash
 cd backend 
 npm install
-mongod  // Will start mongo locally
-mongo   // Will create DB
+mongod
+mongo
 nodemon server
 ```
 
@@ -52,3 +51,5 @@ cd todo-app
 npm install
 npm start
 ```
+
+# On the browser go to localhost:3000/todos to see Todos List.

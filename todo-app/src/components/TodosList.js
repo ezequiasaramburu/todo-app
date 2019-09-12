@@ -47,7 +47,7 @@ const Todo = (props) => {
         </Col>
       )}
       { todo.status === TASK_STATUS.RESOLVED ? (
-        <Col xs='2' md='2'>
+        <Col xs='2' md='2' style={{color: 'green'}}>
           { 'RESOLVED' }
         </Col>
       ) : (  

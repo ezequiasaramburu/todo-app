@@ -42,7 +42,7 @@ module.exports.update = function(req, res) {
       return res.status(200).json({ success: true, todoResolved });
     });
 };
-
+// TODO: delete real file not only path ref on databse
 module.exports.delete = function(req, res) {
   const { id } = req.params;
   TodoSchema.findByIdAndRemove({ _id: id }, function(err, todo) {

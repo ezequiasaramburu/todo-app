@@ -37,16 +37,18 @@ Run backend app
 ```bash
 cd backend 
 npm install
-mongo   // Will create DB
 mongod  // Will start mongo locally
+mongo   // Will create DB
 nodemon server
 ```
 
 # Todo-app
 Run react app
 
+Before run -> cd todo-app/src/api/config and set your local ip (to correctly point to the server running locally).
+
 ```bash
 cd todo-app
 npm install
 npm start
-
+```

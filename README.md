@@ -51,5 +51,6 @@ cd todo-app
 npm install
 npm start
 ```
-
-# On the browser go to localhost:3000/todos to see Todos List.
+```bash
+On the browser go to localhost:3000/todos to see Todos List.
+```
